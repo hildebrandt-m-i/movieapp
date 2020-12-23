@@ -1,0 +1,28 @@
+<ion-slides [options]="slideOptions">
+
+  <ion-slide *ngFor="let pairs of movies | pairs">
+
+    <ion-row>
+      <ion-col size="12" *ngFor="let movie of pairs">
+        <ion-card (click)="showDetail( movie.id )"
+                  color="primary">
+          <img class="poster"
+               [src]="movie.poster_path | image">
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    
+  </ion-slide>
+
+  <ion-slide class="slide-add">
+
+    <ion-button expand="full"
+                class="btn-add"
+                size="large"
+                (click)="onClick()">
+      <ion-icon name="add"></ion-icon>
+    </ion-button>
+    
+  </ion-slide>
+
+</ion-slides>

@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { MoviesService } from '../services/movies.service';
+import { Movie } from '../interfaces/interfaces';
+import { DetailComponent } from '../components/detail/detail.component';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab2',
@@ -7,6 +11,45 @@ import { Component } from '@angular/core';
 })
 export class Tab2Page {
 
-  constructor() {}
+  searchText = '';
+  searching = false;
+  movies: Movie[] = [];
+  suggestions: string[] = ['Spiderman', 'Avengers'];
+
+  constructor(
+    private moviesService: MoviesService,
+    private modalCtrl: ModalController,
+  ) {}
+
+  search( event: any ) {
+
+    const value = event.detail.value;
+
+    if ( value.length === 0 ) {
+      this.searching = false;
+      this.movies = [];
+      return;
+    }
+
+    this.searching = true;
+
+    this.moviesService.searchMovie( value )
+        .subscribe( resp => {
+          this.movies = resp['results'];
+          this.searching = false;
+        });
+
+  }
+
+  async showDetail( id: string ) {
+    const modal = await this.modalCtrl.create({
+      component: DetailComponent,
+      componentProps: {
+        id
+      }
+    });
+
+    modal.present();
+  }
 
 }
